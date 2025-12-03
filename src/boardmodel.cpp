@@ -1,3 +1,3 @@
-#include "../headers/boardmodel.hpp"
+#include "../include/boardmodel.hpp"
 
 BoardModel::BoardModel(QWidget* parent) : QWidget(parent) {}

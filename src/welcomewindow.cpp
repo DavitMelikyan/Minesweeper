@@ -1,4 +1,4 @@
-#include "../headers/welcomewindow.hpp"
+#include "../include/welcomewindow.hpp"
 
 WelcomeWindow::WelcomeWindow(QWidget *parent) : QWidget(parent), beginner(nullptr),  intermediate(nullptr), expert(nullptr) {
     setUI();

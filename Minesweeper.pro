@@ -11,13 +11,13 @@ SOURCES += \
     src/gamecontroller.cpp
 
 HEADERS += \
-    headers/mainwindow.hpp \
-    headers/welcomewindow.hpp \
-    headers/boardmodel.hpp \
-    headers/boardwidget.hpp \
-    headers/cell.hpp \
-    headers/gamecontroller.hpp \
-    headers/headers.hpp
+    include/boardmodel.hpp \
+    include/boardwidget.hpp \
+    include/cell.hpp \
+    include/gamecontroller.hpp \
+    include/headers.hpp \
+    include/mainwindow.hpp \
+    include/welcomewindow.hpp
 
 RESOURCES += resources/resources.qrc
 

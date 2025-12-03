@@ -59,12 +59,12 @@ SOURCES       = ../../src/main.cpp \
 		../../src/boardwidget.cpp \
 		../../src/cell.cpp \
 		../../src/gamecontroller.cpp qrc_resources.cpp \
-		moc_mainwindow.cpp \
-		moc_welcomewindow.cpp \
 		moc_boardmodel.cpp \
 		moc_boardwidget.cpp \
 		moc_cell.cpp \
-		moc_gamecontroller.cpp
+		moc_gamecontroller.cpp \
+		moc_mainwindow.cpp \
+		moc_welcomewindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		welcomewindow.o \
@@ -73,12 +73,12 @@ OBJECTS       = main.o \
 		cell.o \
 		gamecontroller.o \
 		qrc_resources.o \
-		moc_mainwindow.o \
-		moc_welcomewindow.o \
 		moc_boardmodel.o \
 		moc_boardwidget.o \
 		moc_cell.o \
-		moc_gamecontroller.o
+		moc_gamecontroller.o \
+		moc_mainwindow.o \
+		moc_welcomewindow.o
 DIST          = ../../resources/qss/welcome.qss \
 		/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/features/spec_pre.prf \
 		/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/features/device_config.prf \
@@ -325,13 +325,13 @@ DIST          = ../../resources/qss/welcome.qss \
 		/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/features/exceptions.prf \
 		/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/features/yacc.prf \
 		/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/features/lex.prf \
-		../../../../Minesweeper.pro ../../headers/mainwindow.hpp \
-		../../headers/welcomewindow.hpp \
-		../../headers/boardmodel.hpp \
-		../../headers/boardwidget.hpp \
-		../../headers/cell.hpp \
-		../../headers/gamecontroller.hpp \
-		../../headers/headers.hpp ../../src/main.cpp \
+		../../../../Minesweeper.pro ../../include/boardmodel.hpp \
+		../../include/boardwidget.hpp \
+		../../include/cell.hpp \
+		../../include/gamecontroller.hpp \
+		../../include/headers.hpp \
+		../../include/mainwindow.hpp \
+		../../include/welcomewindow.hpp ../../src/main.cpp \
 		../../src/mainwindow.cpp \
 		../../src/welcomewindow.cpp \
 		../../src/boardmodel.cpp \
@@ -888,7 +888,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../resources/resources.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents ../../headers/mainwindow.hpp ../../headers/welcomewindow.hpp ../../headers/boardmodel.hpp ../../headers/boardwidget.hpp ../../headers/cell.hpp ../../headers/gamecontroller.hpp ../../headers/headers.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../include/boardmodel.hpp ../../include/boardwidget.hpp ../../include/cell.hpp ../../include/gamecontroller.hpp ../../include/headers.hpp ../../include/mainwindow.hpp ../../include/welcomewindow.hpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../src/main.cpp ../../src/mainwindow.cpp ../../src/welcomewindow.cpp ../../src/boardmodel.cpp ../../src/boardwidget.cpp ../../src/cell.cpp ../../src/gamecontroller.cpp $(DISTDIR)/
 
 
@@ -924,16 +924,40 @@ qrc_resources.cpp: ../../resources/resources.qrc \
 		../../resources/qss/welcome.qss
 	/Users/davidmelikyan/Qt/6.10.1/macos/libexec/rcc -name resources --no-zstd ../../resources/resources.qrc -o qrc_resources.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_welcomewindow.cpp moc_boardmodel.cpp moc_boardwidget.cpp moc_cell.cpp moc_gamecontroller.cpp
+compiler_moc_header_make_all: moc_boardmodel.cpp moc_boardwidget.cpp moc_cell.cpp moc_gamecontroller.cpp moc_mainwindow.cpp moc_welcomewindow.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_welcomewindow.cpp moc_boardmodel.cpp moc_boardwidget.cpp moc_cell.cpp moc_gamecontroller.cpp
-moc_mainwindow.cpp: ../../headers/mainwindow.hpp \
+	-$(DEL_FILE) moc_boardmodel.cpp moc_boardwidget.cpp moc_cell.cpp moc_gamecontroller.cpp moc_mainwindow.cpp moc_welcomewindow.cpp
+moc_boardmodel.cpp: ../../include/boardmodel.hpp \
+		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QWidget \
+		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qwidget.h \
+		/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc
+	/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=201402L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=17 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/macx-clang -I/Users/davidmelikyan/Desktop/QT/Minesweeper/Minesweeper -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtGui.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/davidmelikyan/Qt/6.10.1/macos/lib ../../include/boardmodel.hpp -o moc_boardmodel.cpp
+
+moc_boardwidget.cpp: ../../include/boardwidget.hpp \
+		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QWidget \
+		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qwidget.h \
+		/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc
+	/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=201402L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=17 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/macx-clang -I/Users/davidmelikyan/Desktop/QT/Minesweeper/Minesweeper -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtGui.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/davidmelikyan/Qt/6.10.1/macos/lib ../../include/boardwidget.hpp -o moc_boardwidget.cpp
+
+moc_cell.cpp: ../../include/cell.hpp \
+		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QWidget \
+		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qwidget.h \
+		/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc
+	/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=201402L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=17 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/macx-clang -I/Users/davidmelikyan/Desktop/QT/Minesweeper/Minesweeper -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtGui.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/davidmelikyan/Qt/6.10.1/macos/lib ../../include/cell.hpp -o moc_cell.cpp
+
+moc_gamecontroller.cpp: ../../include/gamecontroller.hpp \
+		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QWidget \
+		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qwidget.h \
+		/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc
+	/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=201402L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=17 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/macx-clang -I/Users/davidmelikyan/Desktop/QT/Minesweeper/Minesweeper -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtGui.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/davidmelikyan/Qt/6.10.1/macos/lib ../../include/gamecontroller.hpp -o moc_gamecontroller.cpp
+
+moc_mainwindow.cpp: ../../include/mainwindow.hpp \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QMainWindow \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
 		/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc
-	/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=201402L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=17 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/macx-clang -I/Users/davidmelikyan/Desktop/QT/Minesweeper/Minesweeper -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtGui.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/davidmelikyan/Qt/6.10.1/macos/lib ../../headers/mainwindow.hpp -o moc_mainwindow.cpp
+	/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=201402L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=17 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/macx-clang -I/Users/davidmelikyan/Desktop/QT/Minesweeper/Minesweeper -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtGui.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/davidmelikyan/Qt/6.10.1/macos/lib ../../include/mainwindow.hpp -o moc_mainwindow.cpp
 
-moc_welcomewindow.cpp: ../../headers/welcomewindow.hpp \
+moc_welcomewindow.cpp: ../../include/welcomewindow.hpp \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QWidget \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qwidget.h \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QApplication \
@@ -952,31 +976,7 @@ moc_welcomewindow.cpp: ../../headers/welcomewindow.hpp \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QMessageBox \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qmessagebox.h \
 		/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc
-	/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=201402L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=17 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/macx-clang -I/Users/davidmelikyan/Desktop/QT/Minesweeper/Minesweeper -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtGui.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/davidmelikyan/Qt/6.10.1/macos/lib ../../headers/welcomewindow.hpp -o moc_welcomewindow.cpp
-
-moc_boardmodel.cpp: ../../headers/boardmodel.hpp \
-		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QWidget \
-		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qwidget.h \
-		/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc
-	/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=201402L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=17 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/macx-clang -I/Users/davidmelikyan/Desktop/QT/Minesweeper/Minesweeper -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtGui.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/davidmelikyan/Qt/6.10.1/macos/lib ../../headers/boardmodel.hpp -o moc_boardmodel.cpp
-
-moc_boardwidget.cpp: ../../headers/boardwidget.hpp \
-		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QWidget \
-		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qwidget.h \
-		/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc
-	/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=201402L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=17 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/macx-clang -I/Users/davidmelikyan/Desktop/QT/Minesweeper/Minesweeper -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtGui.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/davidmelikyan/Qt/6.10.1/macos/lib ../../headers/boardwidget.hpp -o moc_boardwidget.cpp
-
-moc_cell.cpp: ../../headers/cell.hpp \
-		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QWidget \
-		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qwidget.h \
-		/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc
-	/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=201402L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=17 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/macx-clang -I/Users/davidmelikyan/Desktop/QT/Minesweeper/Minesweeper -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtGui.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/davidmelikyan/Qt/6.10.1/macos/lib ../../headers/cell.hpp -o moc_cell.cpp
-
-moc_gamecontroller.cpp: ../../headers/gamecontroller.hpp \
-		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QWidget \
-		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qwidget.h \
-		/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc
-	/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=201402L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=17 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/macx-clang -I/Users/davidmelikyan/Desktop/QT/Minesweeper/Minesweeper -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtGui.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/davidmelikyan/Qt/6.10.1/macos/lib ../../headers/gamecontroller.hpp -o moc_gamecontroller.cpp
+	/Users/davidmelikyan/Qt/6.10.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=201402L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=17 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/davidmelikyan/Qt/6.10.1/macos/mkspecs/macx-clang -I/Users/davidmelikyan/Desktop/QT/Minesweeper/Minesweeper -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtGui.framework/Headers -I/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/davidmelikyan/Qt/6.10.1/macos/lib ../../include/welcomewindow.hpp -o moc_welcomewindow.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -996,17 +996,17 @@ compiler_clean: compiler_rcc_clean compiler_moc_header_clean
 
 ####### Compile
 
-main.o: ../../src/main.cpp ../../headers/headers.hpp \
-		../../headers/boardmodel.hpp \
+main.o: ../../src/main.cpp ../../include/headers.hpp \
+		../../include/boardmodel.hpp \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QWidget \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qwidget.h \
-		../../headers/boardwidget.hpp \
-		../../headers/cell.hpp \
-		../../headers/gamecontroller.hpp \
-		../../headers/mainwindow.hpp \
+		../../include/boardwidget.hpp \
+		../../include/cell.hpp \
+		../../include/gamecontroller.hpp \
+		../../include/mainwindow.hpp \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QMainWindow \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		../../headers/welcomewindow.hpp \
+		../../include/welcomewindow.hpp \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QApplication \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qapplication.h \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QPushButton \
@@ -1022,12 +1022,12 @@ main.o: ../../src/main.cpp ../../headers/headers.hpp \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qmessagebox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../src/main.cpp
 
-mainwindow.o: ../../src/mainwindow.cpp ../../headers/mainwindow.hpp \
+mainwindow.o: ../../src/mainwindow.cpp ../../include/mainwindow.hpp \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QMainWindow \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qmainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../src/mainwindow.cpp
 
-welcomewindow.o: ../../src/welcomewindow.cpp ../../headers/welcomewindow.hpp \
+welcomewindow.o: ../../src/welcomewindow.cpp ../../include/welcomewindow.hpp \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QWidget \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qwidget.h \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QApplication \
@@ -1047,34 +1047,26 @@ welcomewindow.o: ../../src/welcomewindow.cpp ../../headers/welcomewindow.hpp \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qmessagebox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o welcomewindow.o ../../src/welcomewindow.cpp
 
-boardmodel.o: ../../src/boardmodel.cpp ../../headers/boardmodel.hpp \
+boardmodel.o: ../../src/boardmodel.cpp ../../include/boardmodel.hpp \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QWidget \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o boardmodel.o ../../src/boardmodel.cpp
 
-boardwidget.o: ../../src/boardwidget.cpp ../../headers/boardwidget.hpp \
+boardwidget.o: ../../src/boardwidget.cpp ../../include/boardwidget.hpp \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QWidget \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o boardwidget.o ../../src/boardwidget.cpp
 
-cell.o: ../../src/cell.cpp ../../headers/cell.hpp \
-		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QWidget \
-		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qwidget.h
+cell.o: ../../src/cell.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cell.o ../../src/cell.cpp
 
-gamecontroller.o: ../../src/gamecontroller.cpp ../../headers/gamecontroller.hpp \
+gamecontroller.o: ../../src/gamecontroller.cpp ../../include/gamecontroller.hpp \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/QWidget \
 		/Users/davidmelikyan/Qt/6.10.1/macos/lib/QtWidgets.framework/Headers/qwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gamecontroller.o ../../src/gamecontroller.cpp
 
 qrc_resources.o: qrc_resources.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resources.o qrc_resources.cpp
-
-moc_mainwindow.o: moc_mainwindow.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
-
-moc_welcomewindow.o: moc_welcomewindow.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_welcomewindow.o moc_welcomewindow.cpp
 
 moc_boardmodel.o: moc_boardmodel.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_boardmodel.o moc_boardmodel.cpp
@@ -1087,6 +1079,12 @@ moc_cell.o: moc_cell.cpp
 
 moc_gamecontroller.o: moc_gamecontroller.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_gamecontroller.o moc_gamecontroller.cpp
+
+moc_mainwindow.o: moc_mainwindow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_welcomewindow.o: moc_welcomewindow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_welcomewindow.o moc_welcomewindow.cpp
 
 ####### Install
 

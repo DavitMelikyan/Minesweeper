@@ -1,4 +1,4 @@
-#include "../headers/headers.hpp"
+#include "../include/headers.hpp"
 
 #include <QApplication>
 

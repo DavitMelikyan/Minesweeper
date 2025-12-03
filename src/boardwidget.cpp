@@ -1,3 +1,3 @@
-#include "../headers/boardwidget.hpp"
+#include "../include/boardwidget.hpp"
 
 BoardWidget::BoardWidget(QWidget* parent) : QWidget(parent) {}
