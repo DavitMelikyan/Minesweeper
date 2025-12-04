@@ -58,14 +58,8 @@ void MainWindow::setConnections() {
     });
 
     connect(backToMenu, &QPushButton::clicked, [this]() {
-        this->hide();
+        emit backRequested();
     });
-}
-
-void MainWindow::restartGame() {
-    statusPanel->updateTimer(0);
-    statusPanel->updateMineCount(m_mines);
-    statusPanel->setFaceState(GameState::Playing);
 }
 
 void MainWindow::changeDifficulty() {
@@ -73,7 +67,7 @@ void MainWindow::changeDifficulty() {
 }
 
 void MainWindow::exit() {
-
+    qApp->quit();
 }
 
 void MainWindow::newGame() {
@@ -109,11 +103,18 @@ void StatusPanel::setUI() {
 }
 
 void StatusPanel::setConnections() {
-
+    connect(restart, &QPushButton::clicked, [this]() {
+        updateTimer(0);
+        updateMineCount(mines);
+        setFaceState(GameState::Playing);
+    });
 }
 
 void StatusPanel::changeDiff(const QString& diff) {
     diffLabel->setText(diff);
+    if (diff == "Beginner") mines = 10;
+    else if (diff == "Intermediate") mines = 40;
+    else mines = 90;
 }
 
 void StatusPanel::setFaceState(GameState state) {

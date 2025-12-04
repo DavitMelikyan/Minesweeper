@@ -11,6 +11,7 @@
 #include <QTimer>
 #include <QLCDNumber>
 #include <QMenuBar>
+#include "welcomewindow.hpp"
 
 enum class GameState { Playing, Won, Lost };
 
@@ -21,6 +22,7 @@ private:
     QPushButton* restart;
     QLCDNumber* timerCounter;
     QLabel* diffLabel;
+    int mines;
 
     void setUI();
     void setConnections();
@@ -50,11 +52,12 @@ private:
     void setUI();
     void createStatusPanel();
     void setConnections();
+signals:
+    void backRequested();
 private slots:
     void newGame();
     void changeDifficulty();
     void exit();
-    void restartGame();
 public:
     MainWindow(int rows, int cols, int mines, QWidget* parent = nullptr);
 };

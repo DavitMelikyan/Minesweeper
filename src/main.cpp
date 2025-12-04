@@ -7,8 +7,14 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     WelcomeWindow welcome;
     welcome.show();
+    MainWindow *game = nullptr;
     QObject::connect(&welcome, &WelcomeWindow::difficultySelected,[&](int rows, int cols, int mines) {
-        MainWindow *game = new MainWindow(rows, cols, mines);
+        game = new MainWindow(rows, cols, mines);
+
+        QObject::connect(game, &MainWindow::backRequested,[&](){
+            welcome.show();
+            game->hide();
+        });
         game->show();
         welcome.close();
     });
