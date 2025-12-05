@@ -1,0 +1,23 @@
+# Ignore build directories
+build/
+bin/
+*.o
+*.obj
+*.exe
+*.out
+*.app
+
+# Qt-specific files
+*.pro.user
+*.qmake.stash
+*.qmake.cache
+*.autosave
+*.moc
+*.rcc
+*.ui~
+
+# macOS specific
+.DS_Store
+
+# Backup files
+*~
