@@ -11,7 +11,8 @@
 #include <QTimer>
 #include <QLCDNumber>
 #include <QMenuBar>
-#include "welcomewindow.hpp"
+#include <QInputDialog>
+#include <QFile>
 
 enum class GameState { Playing, Won, Lost };
 
@@ -22,10 +23,12 @@ private:
     QPushButton* restart;
     QLCDNumber* timerCounter;
     QLabel* diffLabel;
-    int mines;
+    int mines = 0;
 
     void setUI();
     void setConnections();
+signals:
+    void restartRequested();
 public:
     StatusPanel(QWidget* parent = nullptr);
     void setFaceState(GameState state);
@@ -40,11 +43,13 @@ class MainWindow : public QMainWindow
 private:
     StatusPanel* statusPanel;
     QMenuBar* menuBar;
+    QMenu* helpMenu;
     QPushButton* backToMenu;
     QMenu* menu;
     QAction* startNewGame;
     QAction* changeGameDiff;
     QAction* exitGame;
+    QAction* helpAbout;
     int m_rows;
     int m_cols;
     int m_mines;
@@ -52,12 +57,13 @@ private:
     void setUI();
     void createStatusPanel();
     void setConnections();
+    void setWindowSize();
 signals:
     void backRequested();
 private slots:
     void newGame();
     void changeDifficulty();
-    void exit();
+    void exitApp();
 public:
     MainWindow(int rows, int cols, int mines, QWidget* parent = nullptr);
 };

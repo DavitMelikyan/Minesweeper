@@ -21,6 +21,7 @@ private:
     QPushButton *howToPlay;
     QPushButton *about;
     QLabel* title;
+    QLabel* dif;
 
     void setUI();
     void setConnections();

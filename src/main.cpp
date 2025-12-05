@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
         QObject::connect(game, &MainWindow::backRequested,[&](){
             welcome.show();
             game->hide();
+            delete game;
         });
         game->show();
         welcome.close();

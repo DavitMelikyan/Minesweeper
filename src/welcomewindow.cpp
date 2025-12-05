@@ -9,7 +9,7 @@ WelcomeWindow::WelcomeWindow(QWidget *parent) : QWidget(parent), beginner(nullpt
 void WelcomeWindow::setUI() {
     QFile styleFile(":/qss/welcome.qss");
     if (styleFile.open(QFile::ReadOnly)) {
-        qApp->setStyleSheet(styleFile.readAll());
+        setStyleSheet(styleFile.readAll());
     }
 
 
@@ -19,41 +19,48 @@ void WelcomeWindow::setUI() {
     howToPlay = new QPushButton("How to Play", this);
     about = new QPushButton("About", this);
     title = new QLabel("MINESWEEPER", this);
-    QLabel* dif = new QLabel("SELECT DIFFICULTY", this);
+    dif = new QLabel("SELECT DIFFICULTY", this);
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->addStretch();
-    layout->addWidget(title, 0, Qt::AlignHCenter);
-    layout->addWidget(dif, 0, Qt::AlignHCenter);
-    layout->addSpacing(15);
-    layout->addWidget(beginner, 0, Qt::AlignHCenter);
-    layout->addWidget(intermediate, 0, Qt::AlignHCenter);
-    layout->addWidget(expert, 0, Qt::AlignHCenter);
-    layout->addSpacing(20);
-    layout->addWidget(howToPlay, 0, Qt::AlignHCenter);
-    layout->addWidget(about, 0, Qt::AlignHCenter);
-    layout->addStretch();
     title->setObjectName("titleLabel");
     title->setAlignment(Qt::AlignCenter);
     dif->setObjectName("difLabel");
     dif->setAlignment(Qt::AlignCenter);
 
-    beginner->setMinimumWidth(300);
-    intermediate->setMinimumWidth(300);
-    expert->setMinimumWidth(300);
-    howToPlay->setMinimumWidth(300);
-    about->setMinimumWidth(300);
-    beginner->setMaximumWidth(400);
-    intermediate->setMaximumWidth(400);
-    expert->setMaximumWidth(400);
-    howToPlay->setMaximumWidth(400);
-    about->setMaximumWidth(400);
-    beginner->setMinimumHeight(60);
-    intermediate->setMinimumHeight(60);
-    expert->setMinimumHeight(60);
-    howToPlay->setMinimumHeight(60);
-    about->setMinimumHeight(60);
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(40, 40, 40, 40);
+    layout->setSpacing(18);
 
+    layout->addStretch(1);
+    layout->addWidget(title);
+    layout->addWidget(dif);
+    layout->addSpacing(8);
+
+    layout->addStretch();
+    layout->addWidget(title);
+    layout->addWidget(dif);
+
+    layout->addWidget(beginner);
+    layout->addWidget(intermediate);
+    layout->addWidget(expert);
+
+    layout->addSpacing(20);
+    layout->addWidget(howToPlay);
+    layout->addWidget(about);
+    layout->addStretch(2);
+
+    QList<QPushButton*> buttons = { beginner, intermediate, expert, howToPlay, about };
+    for (auto btn : buttons) {
+        btn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        btn->setMinimumHeight(50);
+        btn->setMinimumWidth(220);
+    }
+
+    title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    dif->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    title->setMinimumHeight(48);
+    dif->setMinimumHeight(32);
+
+    setMinimumSize(480, 360);
     setWindowTitle("Minesweeper");
 }
 
