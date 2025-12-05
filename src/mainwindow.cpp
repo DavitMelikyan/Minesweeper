@@ -34,6 +34,10 @@ void MainWindow::setUI() {
     createStatusPanel();
     layout->addWidget(statusPanel);
 
+    board = new BoardWidget(m_rows, m_cols, this);
+    board->setEnabled(true);
+    layout->addWidget(board, 1);
+
     setMenuBar(menuBar);
 
     QHBoxLayout* bckLayout = new QHBoxLayout();

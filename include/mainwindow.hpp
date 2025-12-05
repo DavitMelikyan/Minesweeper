@@ -13,6 +13,7 @@
 #include <QMenuBar>
 #include <QInputDialog>
 #include <QFile>
+#include "boardwidget.hpp"
 
 enum class GameState { Playing, Won, Lost };
 
@@ -50,6 +51,7 @@ private:
     QAction* changeGameDiff;
     QAction* exitGame;
     QAction* helpAbout;
+    BoardWidget* board;
     int m_rows;
     int m_cols;
     int m_mines;

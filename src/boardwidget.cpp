@@ -1,3 +1,49 @@
 #include "../include/boardwidget.hpp"
 
-BoardWidget::BoardWidget(QWidget* parent) : QWidget(parent) {}
+BoardWidget::BoardWidget(int rows, int cols, QWidget* parent) : QWidget(parent), m_rows(rows), m_cols(cols) {
+    layout = new QGridLayout(this);
+    layout->setSpacing(3);
+    layout->setContentsMargins(0, 0, 0, 0);
+    setLayout(layout);
+    createGrid(rows, cols);
+}
+
+void BoardWidget::createGrid(int rows, int cols) {
+    for (auto& row : m_cells) {
+        for (auto* button : row) {
+            if (button) layout->removeWidget(button);
+            delete button;
+        }
+    }
+
+    m_cells.clear();
+    m_rows = rows;
+    m_cols = cols;
+    m_cells.resize(rows);
+
+    for (int r = 0; r < m_rows; ++r) {
+        m_cells[r].resize(cols);
+        for (int c = 0; c < cols; ++c) {
+            CellButton* button = new CellButton(r, c, this);
+            layout->addWidget(button, r, c);
+            m_cells[r][c] = button;
+
+            connect(button, &CellButton::leftClicked, this, &BoardWidget::handleLeftClick);
+            connect(button, &CellButton::rightClicked, this, &BoardWidget::handleRightClick);
+        }
+    }
+}
+
+CellButton* BoardWidget::cellAt(int row, int col) const
+{
+    if (row >= 0 && row < m_rows && col >= 0 && col < m_cols) return m_cells[row][col];
+    return nullptr;
+}
+
+void BoardWidget::handleLeftClick(int row, int col) {
+    qDebug() << "Left click at " << row << "," << col;
+}
+
+void BoardWidget::handleRightClick(int row, int col) {
+    qDebug() << "Right click at " << row << "," << col;
+}
