@@ -1,6 +1,11 @@
 #include "../include/gamecontroller.hpp"
 
 GameController::GameController(QWidget* parent) : QWidget(parent) {
+    QFile f(":/qss/game.qss");
+    if (f.open(QFile::ReadOnly | QFile::Text)) {
+        qApp->setStyleSheet(QString::fromUtf8(f.readAll()));
+        f.close();
+    }
     welcome = new WelcomeWindow;
     welcome->show();
     centerWindow(welcome);

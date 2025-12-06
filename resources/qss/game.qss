@@ -1,0 +1,129 @@
+QWidget#GameWindow {
+    background-color: #2E2E2E;
+    color: #FFFFFF;
+    font-family: "Segoe UI", "Roboto", Arial, sans-serif;
+}
+
+#titleLabel {
+    font-size: 28px;
+    font-weight: 700;
+    color: #FFFFFF;
+    padding: 10px 0;
+    letter-spacing: 1px;
+    qproperty-alignment: AlignCenter;
+}
+
+#difLabel {
+    font-size: 18px;
+    font-weight: 600;
+    color: #CCCCCC;
+    padding: 6px 0 14px 0;
+    qproperty-alignment: AlignCenter;
+}
+
+QPushButton#beginnerButton,
+QPushButton#intermediateButton,
+QPushButton#expertButton,
+QPushButton#howToPlayButton,
+QPushButton#aboutButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #4A4A4A, stop:1 #3A3A3A);
+    border: 1px solid #5A5A5A;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #FFFFFF;
+    min-height: 50px;
+    min-width: 220px;
+}
+
+QPushButton#beginnerButton:hover,
+QPushButton#intermediateButton:hover,
+QPushButton#expertButton:hover,
+QPushButton#howToPlayButton:hover,
+QPushButton#aboutButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #5A5A5A, stop:1 #4A4A4A);
+    cursor: pointer;
+}
+
+CellButton {
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 36px;
+    max-height: 36px;
+    padding: 2px;
+    margin: 0px;
+    border-radius: 4px;
+    font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    qproperty-iconSize: 20px;
+    text-align: center;
+}
+
+CellButton[cellState="covered"] {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #6A6A6A, stop:0.5 #5A5A5A, stop:1 #4A4A4A);
+    border: 2px solid #333333;
+    border-top-color: #777777;
+    border-left-color: #777777;
+    color: #FFFFFF;
+}
+
+CellButton[cellState="covered"]:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #7A7A7A, stop:0.6 #6C6C6C, stop:1 #5C5C5C);
+    border-color: #888888;
+    cursor: pointer;
+}
+
+CellButton[cellState="covered"]:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #555555, stop:1 #444444);
+    border-style: inset;
+}
+
+CellButton[cellState="flagged"] {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #6A6A6A, stop:0.5 #5A5A5A, stop:1 #4A4A4A);
+    border: 2px solid #333333;
+    border-top-color: #777777;
+    border-left-color: #777777;
+    font-size: 16px;
+    line-height: 18px;
+    color: #FF5555;
+}
+
+CellButton[cellState="revealedEmpty"],
+CellButton[cellState="revealedNumber"],
+CellButton[cellState="revealedMine"],
+CellButton[cellState="revealedWrongFlag"] {
+    background: #3A3A3A;
+    border: 1px solid #555555;
+    font-weight: 700;
+    padding: 0px;
+    cursor: default;
+    color: #FFFFFF;
+}
+
+CellButton[cellState="revealedNumber"][number="1"] { color: #0000FF; }
+CellButton[cellState="revealedNumber"][number="2"] { color: #008000; }
+CellButton[cellState="revealedNumber"][number="3"] { color: #FF0000; }
+CellButton[cellState="revealedNumber"][number="4"] { color: #000080; }
+CellButton[cellState="revealedNumber"][number="5"] { color: #800000; }
+CellButton[cellState="revealedNumber"][number="6"] { color: #008080; }
+CellButton[cellState="revealedNumber"][number="7"] { color: #000000; }
+CellButton[cellState="revealedNumber"][number="8"] { color: #808080; }
+
+CellButton[cellState="revealedMine"] {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FF5555, stop:1 #AA0000);
+    border: 1px solid #770000;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+
+CellButton[cellState="revealedWrongFlag"] {
+    background: #FFAA33;
+    border: 1px solid #B58300;
+    color: #660000;
+    font-weight: 800;
+}
+
+CellButton:disabled {
+    opacity: 0.95;
+}

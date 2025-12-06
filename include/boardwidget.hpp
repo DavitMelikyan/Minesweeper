@@ -22,6 +22,9 @@ private:
     int m_rows;
     int m_cols;
     QGridLayout* layout;
+
+    void testCellsWithNumbers();
+    void testCellsWithStates();
 };
 
 #endif // BOARDWIDGET_HPP

@@ -3,6 +3,7 @@
 MainWindow::MainWindow(int rows, int cols, int mines, QWidget* parent)
     : QMainWindow(parent), m_rows(rows), m_cols(cols), m_mines(mines)
 {
+    setObjectName("GameWindow");
     setUI();
     setConnections();
     setWindowSize();
@@ -10,11 +11,6 @@ MainWindow::MainWindow(int rows, int cols, int mines, QWidget* parent)
 
 
 void MainWindow::setUI() {
-    QFile styleFile(":/qss/welcome.qss");
-    if (styleFile.open(QFile::ReadOnly)) {
-        setStyleSheet(styleFile.readAll());
-    }
-
     menuBar = new QMenuBar(this);
     menu = new QMenu("Game", this);
     startNewGame = menu->addAction("New Game");
@@ -109,6 +105,7 @@ void MainWindow::changeDifficulty() {
     statusPanel->updateMineCount(m_mines);
     statusPanel->updateTimer(0);
     statusPanel->setFaceState(GameState::Playing);
+    board->createGrid(m_rows, m_cols);
 
     setWindowSize();
     newGame();
@@ -122,9 +119,6 @@ void MainWindow::newGame() {
     statusPanel->setFaceState(GameState::Playing);
     statusPanel->updateTimer(0);
     statusPanel->updateMineCount(m_mines);
-
-    ///
-    ///
 }
 
 // StatusPanel Class
@@ -145,6 +139,11 @@ void StatusPanel::setUI() {
     mineCounter->display("000");
     timerCounter->display("000");
     restart->setMinimumSize(55, 40);
+
+    mineCounter->setObjectName("mineCounter");
+    timerCounter->setObjectName("timerCounter");
+    restart->setObjectName("restartButton");
+    diffLabel->setObjectName("diffLabel");
 
     mineCounter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     timerCounter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -183,9 +182,22 @@ void StatusPanel::changeDiff(const QString& diff) {
 }
 
 void StatusPanel::setFaceState(GameState state) {
-    if (state == GameState::Playing) restart->setText("😊");
-    else if (state == GameState::Won) restart->setText("😎");
-    else restart->setText("💀");
+    if (state == GameState::Playing) {
+        restart->setText("😊");
+        restart->setProperty("state", "playing");
+    }
+    else if (state == GameState::Won) {
+        restart->setText("😎");
+        restart->setProperty("state", "won");
+    }
+    else {
+        restart->setText("💀");
+        restart->setProperty("state", "lost");
+    }
+
+    restart->style()->unpolish(restart);
+    restart->style()->polish(restart);
+    restart->update();
 }
 
 void StatusPanel::updateMineCount(int mcount) {

@@ -1,18 +1,13 @@
 #include "../include/welcomewindow.hpp"
 
 WelcomeWindow::WelcomeWindow(QWidget *parent) : QWidget(parent), beginner(nullptr),  intermediate(nullptr), expert(nullptr) {
+    setObjectName("GameWindow");
     setUI();
     setConnections();
 }
 
 
 void WelcomeWindow::setUI() {
-    QFile styleFile(":/qss/welcome.qss");
-    if (styleFile.open(QFile::ReadOnly)) {
-        setStyleSheet(styleFile.readAll());
-    }
-
-
     beginner = new QPushButton("Beginner (9x9, 10 mines)", this);
     intermediate = new QPushButton("Intermediate (16x16, 40 mines)",this);
     expert = new QPushButton("Expert (16x30, 99 mines)",this);
@@ -26,6 +21,10 @@ void WelcomeWindow::setUI() {
     dif->setObjectName("difLabel");
     dif->setAlignment(Qt::AlignCenter);
 
+    beginner->setProperty("difficulty", true);
+    intermediate->setProperty("difficulty", true);
+    expert->setProperty("difficulty", true);
+
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(40, 40, 40, 40);
     layout->setSpacing(18);
@@ -34,10 +33,6 @@ void WelcomeWindow::setUI() {
     layout->addWidget(title);
     layout->addWidget(dif);
     layout->addSpacing(8);
-
-    layout->addStretch();
-    layout->addWidget(title);
-    layout->addWidget(dif);
 
     layout->addWidget(beginner);
     layout->addWidget(intermediate);

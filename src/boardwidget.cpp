@@ -6,6 +6,8 @@ BoardWidget::BoardWidget(int rows, int cols, QWidget* parent) : QWidget(parent),
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
     createGrid(rows, cols);
+    // testCellsWithNumbers();
+    testCellsWithStates();
 }
 
 void BoardWidget::createGrid(int rows, int cols) {
@@ -47,3 +49,29 @@ void BoardWidget::handleLeftClick(int row, int col) {
 void BoardWidget::handleRightClick(int row, int col) {
     qDebug() << "Right click at " << row << "," << col;
 }
+
+// Debug functions
+
+void BoardWidget::testCellsWithNumbers() {
+    int testNumbers[] = {1, 2, 3, 4, 5, 6, 7, 8};
+
+    for (int r = 0; r < m_rows; ++r) {
+        for (int c = 0; c < m_cols; ++c) {
+            m_cells[r][c]->setState(CellState::RevealedNumber, testNumbers[c % 8]);
+        }
+    }
+}
+
+void BoardWidget::testCellsWithStates() {
+    CellState testStates[] = {
+        CellState::Covered, CellState::Flagged, CellState::RevealedEmpty,
+        CellState::RevealedNumber, CellState::RevealedMine, CellState::RevealedWrongFlag
+    };
+
+    for (int r = 0; r < m_rows; ++r) {
+        for (int c = 0; c < m_cols; ++c) {
+            m_cells[r][c]->setState(testStates[c % 6]);
+        }
+    }
+}
+

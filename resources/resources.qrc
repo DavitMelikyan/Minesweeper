@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>qss/welcome.qss</file>
+        <file>qss/game.qss</file>
     </qresource>
 </RCC>
