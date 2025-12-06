@@ -6,8 +6,8 @@ BoardWidget::BoardWidget(int rows, int cols, QWidget* parent) : QWidget(parent),
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
     createGrid(rows, cols);
-    // testCellsWithNumbers();
-    testCellsWithStates();
+    testCellsWithNumbers();
+    // testCellsWithStates();
 }
 
 void BoardWidget::createGrid(int rows, int cols) {
