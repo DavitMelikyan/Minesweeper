@@ -46,10 +46,8 @@ QPushButton#aboutButton:hover {
 }
 
 CellButton {
-    min-width: 28px;
-    min-height: 28px;
-    max-width: 36px;
-    max-height: 36px;
+    min-width: 30px;
+    min-height: 30px;
     padding: 2px;
     margin: 0px;
     border-radius: 4px;

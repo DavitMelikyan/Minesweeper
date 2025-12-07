@@ -17,6 +17,9 @@ public:
 private slots:
     void handleLeftClick(int row, int col);
     void handleRightClick(int row, int col);
+signals:
+    void leftClicked(int row, int col);
+    void rightClicked(int row, int col);
 private:
     std::vector<std::vector<CellButton*>> m_cells;
     int m_rows;

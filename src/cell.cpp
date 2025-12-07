@@ -1,7 +1,7 @@
 #include "../include/cell.hpp"
 
 CellButton::CellButton(int row, int col, QWidget* parent) : QPushButton(parent), m_row(row), m_col(col) {
-    setFixedSize(30, 30);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setState(CellState::Covered);
 }
 

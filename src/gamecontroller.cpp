@@ -35,7 +35,7 @@ void GameController::startGame(int rows, int cols, int mines) {
     QObject::connect(game, &MainWindow::backRequested, this, &GameController::returnToMenu);
 
     game->show();
-    welcome->hide();
+    welcome->close();
     centerWindow(game);
 }
 

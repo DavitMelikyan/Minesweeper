@@ -2,11 +2,11 @@
 
 BoardWidget::BoardWidget(int rows, int cols, QWidget* parent) : QWidget(parent), m_rows(rows), m_cols(cols) {
     layout = new QGridLayout(this);
-    layout->setSpacing(3);
-    layout->setContentsMargins(0, 0, 0, 0);
-    setLayout(layout);
     createGrid(rows, cols);
-    testCellsWithNumbers();
+    setLayout(layout);
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
+    // testCellsWithNumbers();
     // testCellsWithStates();
 }
 
@@ -44,10 +44,12 @@ CellButton* BoardWidget::cellAt(int row, int col) const
 
 void BoardWidget::handleLeftClick(int row, int col) {
     qDebug() << "Left click at " << row << "," << col;
+    emit leftClicked(row, col);
 }
 
 void BoardWidget::handleRightClick(int row, int col) {
     qDebug() << "Right click at " << row << "," << col;
+    emit rightClicked(row, col);
 }
 
 // Debug functions

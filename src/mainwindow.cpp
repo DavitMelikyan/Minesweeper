@@ -1,7 +1,7 @@
 #include "../include/mainwindow.hpp"
 
 MainWindow::MainWindow(int rows, int cols, int mines, QWidget* parent)
-    : QMainWindow(parent), m_rows(rows), m_cols(cols), m_mines(mines)
+    : QMainWindow(parent), m_rows(rows), m_cols(cols), m_mines(mines), fClick(false)
 {
     setObjectName("GameWindow");
     setUI();
@@ -15,11 +15,11 @@ void MainWindow::setUI() {
     menu = new QMenu("Game", this);
     startNewGame = menu->addAction("New Game");
     changeGameDiff = menu->addAction("Change Difficulty");
-    exitGame = menu->addAction("Exit");
+    exitGame = menu->addAction("Close the game");
 
 
     helpMenu = new QMenu("Help", this);
-    helpAbout = helpMenu->addAction("About");
+    helpAbout = helpMenu->addAction("Info about game");
 
     QWidget* central = new QWidget(this);
     QVBoxLayout* layout = new QVBoxLayout(central);
@@ -72,7 +72,15 @@ void MainWindow::setConnections() {
         emit backRequested();
     });
 
+    connect(helpAbout, &QAction::triggered, []() {
+        QMessageBox::information(nullptr, "How to Play","Reveal all cells without hitting mines.\nLeft-click to reveal cell.\nRight-click to place flags.");
+    });
+
     connect(statusPanel, &StatusPanel::restartRequested, this, &MainWindow::newGame);
+
+
+    connect(board, &BoardWidget::leftClicked, this, &MainWindow::handleLeftClick);
+    connect(board, &BoardWidget::rightClicked, this, &MainWindow::handleRightClick);
 }
 
 void MainWindow::setWindowSize() {
@@ -98,13 +106,10 @@ void MainWindow::changeDifficulty() {
     } else if (diff == "Expert") {
         m_rows = 16;
         m_cols = 30;
-        m_mines = 90;
+        m_mines = 99;
     }
 
     statusPanel->changeDiff(diff);
-    statusPanel->updateMineCount(m_mines);
-    statusPanel->updateTimer(0);
-    statusPanel->setFaceState(GameState::Playing);
     board->createGrid(m_rows, m_cols);
 
     setWindowSize();
@@ -117,8 +122,23 @@ void MainWindow::exitApp() {
 
 void MainWindow::newGame() {
     statusPanel->setFaceState(GameState::Playing);
-    statusPanel->updateTimer(0);
+    statusPanel->resetTimer();
+    statusPanel->stopTimer();
     statusPanel->updateMineCount(m_mines);
+    fClick = false;
+}
+
+void MainWindow::handleLeftClick(int row, int col) {
+    if (!fClick) {
+        fClick = true;
+        statusPanel->startTimer();
+    }
+}
+void MainWindow::handleRightClick(int row, int col) {
+    if (!fClick) {
+        fClick = true;
+        statusPanel->startTimer();
+    }
 }
 
 // StatusPanel Class
@@ -133,6 +153,8 @@ void StatusPanel::setUI() {
     timerCounter = new QLCDNumber(3, this);
     restart = new QPushButton("😊", this);
     diffLabel = new QLabel("Beginner", this);
+    timer = new QTimer(this);
+    timer->setInterval(1000);
 
     mineCounter->setSegmentStyle(QLCDNumber::Flat);
     timerCounter->setSegmentStyle(QLCDNumber::Flat);
@@ -158,7 +180,7 @@ void StatusPanel::setUI() {
 
     layout->addWidget(mineCounter, 2);
     layout->addStretch(1);
-    layout->addWidget(restart, 0);
+    layout->addWidget(restart, 2);
     layout->addStretch(1);
     layout->addWidget(timerCounter, 2);
     layout->addWidget(diffLabel, 1);
@@ -170,13 +192,14 @@ void StatusPanel::setConnections() {
     connect(restart, &QPushButton::clicked, [this]() {
         emit restartRequested();
     });
+    connect(timer, &QTimer::timeout, this, &StatusPanel::updateTimer);
 }
 
 void StatusPanel::changeDiff(const QString& diff) {
     diffLabel->setText(diff);
     if (diff == "Beginner") mines = 10;
     else if (diff == "Intermediate") mines = 40;
-    else mines = 90;
+    else mines = 99;
 
     mineCounter->display(QString("%1").arg(mines, 3, 10, QLatin1Char('0')));
 }
@@ -204,6 +227,20 @@ void StatusPanel::updateMineCount(int mcount) {
     mineCounter->display(QString("%1").arg(mcount, 3, 10, QLatin1Char('0')));
 }
 
-void StatusPanel::updateTimer(int nseconds) {
-    timerCounter->display(QString("%1").arg(nseconds, 3, 10, QLatin1Char('0')));
+void StatusPanel::updateTimer() {
+    timerCounter->display(QString("%1").arg(m_seconds++, 3, 10, QLatin1Char('0')));
+}
+
+void StatusPanel::startTimer() {
+    m_seconds = 0;
+    timer->start();
+}
+
+void StatusPanel::stopTimer() {
+    timer->stop();
+}
+
+void StatusPanel::resetTimer() {
+    m_seconds = 0;
+    updateTimer();
 }
