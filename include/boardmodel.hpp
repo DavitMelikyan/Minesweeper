@@ -23,6 +23,7 @@ private:
     const int dy[8] = {-1,  0,  1, -1, 1, -1, 0, 1};
     int revealedCells;
     int flaggedCells;
+    bool mineRevealed;
 public:
     BoardModel();
 
@@ -46,6 +47,11 @@ public:
     int getRemainingMineCount() const;
     int getFlaggedCount() const;
     bool isCellFlagged(int row, int col) const;
+
+    bool checkWinCondition() const;
+    bool checkLossCondition() const;
+    void revealAllMines();
+    bool isGameOver() const;
 };
 
 #endif // BOARDMODEL_HPP

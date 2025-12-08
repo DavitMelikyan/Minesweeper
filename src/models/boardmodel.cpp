@@ -1,6 +1,6 @@
 #include "include/boardmodel.hpp"
 
-BoardModel::BoardModel() : m_state(GameState::NotStarted), frow(-1), fcol(-1), placedMines(0), minesPlaced(false), revealedCells(0), flaggedCells(0) {}
+BoardModel::BoardModel() : m_state(GameState::NotStarted), frow(-1), fcol(-1), placedMines(0), minesPlaced(false), revealedCells(0), flaggedCells(0), mineRevealed(false) {}
 
 
 void BoardModel::initializeBoard(int rows, int cols, int mineCount) {
@@ -18,6 +18,7 @@ void BoardModel::initializeBoard(int rows, int cols, int mineCount) {
     minesPlaced = false;
     revealedCells = 0;
     flaggedCells = 0;
+    mineRevealed = false;
 }
 
 CellModel& BoardModel::getCell(int row, int col) {
@@ -97,18 +98,22 @@ void BoardModel::calculateAdjacentCounts() {
 }
 
 void BoardModel::revealCell(int row, int col) {
+    if (isGameOver()) return;
     if (!isValidPosition(row, col)) return;
     if (m_cells[row][col].isRevealed() || m_cells[row][col].isFlagged()) return;
     if (isFirstClick()) {
         placeMines(row, col);
+        m_state = GameState::Playing;
     }
     m_cells[row][col].setRevealed(true);
     ++revealedCells;
     if (m_cells[row][col].hasMine()) {
         m_state = GameState::Lost;
+        mineRevealed = true;
+        revealAllMines();
         return;
     } else if (m_cells[row][col].adjacentMines() > 0) {
-        if (getRevealedCount() == m_rows * m_cols - m_mines) m_state = GameState::Won;
+        if (checkWinCondition()) m_state = GameState::Won;
         return;
     } else {
         std::queue<std::pair<int, int>> q;
@@ -135,7 +140,7 @@ void BoardModel::revealCell(int row, int col) {
                 }
             }
         }
-        if (getRevealedCount() == m_rows * m_cols - m_mines) m_state = GameState::Won;
+        if (checkWinCondition()) m_state = GameState::Won;
     }
 }
 
@@ -144,6 +149,7 @@ int BoardModel::getRevealedCount() const {
 }
 
 bool BoardModel::toggleFlag(int row, int col) {
+    if (isGameOver()) return false;
     if (!isValidPosition(row, col)) return false;
     if (m_cells[row][col].isRevealed()) return false;
     if (m_cells[row][col].isFlagged()) {
@@ -163,7 +169,29 @@ int BoardModel::getRemainingMineCount() const {
 int BoardModel::getFlaggedCount() const {
     return flaggedCells;
 }
+
 bool BoardModel::isCellFlagged(int row, int col) const {
     if (!isValidPosition(row, col)) return false;
     return m_cells[row][col].isFlagged();
+}
+
+bool BoardModel::checkWinCondition() const {
+    return m_rows * m_cols - m_mines == revealedCells;
+}
+
+bool BoardModel::checkLossCondition() const {
+    return mineRevealed;
+}
+
+void BoardModel::revealAllMines() {
+    for (int r = 0; r < m_rows; ++r) {
+        for (int c = 0; c < m_cols; ++c) {
+            if (m_cells[r][c].hasMine() && !m_cells[r][c].isFlagged()) m_cells[r][c].setRevealed(true);
+            else if (!m_cells[r][c].hasMine() && m_cells[r][c].isFlagged()) m_cells[r][c].setRevealed(true);
+        }
+    }
+}
+
+bool BoardModel::isGameOver() const {
+    return (m_state == GameState::Won || m_state == GameState::Lost);
 }
