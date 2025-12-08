@@ -195,3 +195,34 @@ void BoardModel::revealAllMines() {
 bool BoardModel::isGameOver() const {
     return (m_state == GameState::Won || m_state == GameState::Lost);
 }
+
+void BoardModel::resetGame() {
+    for (int r = 0; r < m_rows; ++r) {
+        for (int c = 0; c < m_cols; ++c) {
+            m_cells[r][c].setAdjacentMines(0);
+            m_cells[r][c].setMine(false);
+            m_cells[r][c].setFlagged(false);
+            m_cells[r][c].setRevealed(false);
+        }
+    }
+    m_state = GameState::NotStarted;
+    frow = -1;
+    fcol = -1;
+    placedMines = 0;
+    minesPlaced = false;
+    revealedCells = 0;
+    flaggedCells = 0;
+    mineRevealed = false;
+}
+
+void BoardModel::newGame(int rows, int cols, int mineCount) {
+    if (rows != m_rows || cols != m_cols) {
+        m_rows = rows;
+        m_cols = cols;
+        m_cells.clear();
+        m_cells.resize(rows);
+        for (int i = 0; i < rows; ++i) m_cells[i].resize(cols);
+    }
+    resetGame();
+    m_mines = mineCount;
+}

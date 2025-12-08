@@ -52,6 +52,9 @@ public:
     bool checkLossCondition() const;
     void revealAllMines();
     bool isGameOver() const;
+
+    void resetGame();
+    void newGame(int rows, int cols, int mineCount);
 };
 
 #endif // BOARDMODEL_HPP
