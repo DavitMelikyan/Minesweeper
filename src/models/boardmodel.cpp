@@ -1,6 +1,6 @@
 #include "include/boardmodel.hpp"
 
-BoardModel::BoardModel() : m_state(GameState::NotStarted), frow(-1), fcol(-1), placedMines(0), minesPlaced(false), revealedCells(0) {}
+BoardModel::BoardModel() : m_state(GameState::NotStarted), frow(-1), fcol(-1), placedMines(0), minesPlaced(false), revealedCells(0), flaggedCells(0) {}
 
 
 void BoardModel::initializeBoard(int rows, int cols, int mineCount) {
@@ -17,6 +17,7 @@ void BoardModel::initializeBoard(int rows, int cols, int mineCount) {
     fcol = -1;
     minesPlaced = false;
     revealedCells = 0;
+    flaggedCells = 0;
 }
 
 CellModel& BoardModel::getCell(int row, int col) {
@@ -140,4 +141,29 @@ void BoardModel::revealCell(int row, int col) {
 
 int BoardModel::getRevealedCount() const {
     return revealedCells;
+}
+
+bool BoardModel::toggleFlag(int row, int col) {
+    if (!isValidPosition(row, col)) return false;
+    if (m_cells[row][col].isRevealed()) return false;
+    if (m_cells[row][col].isFlagged()) {
+        m_cells[row][col].setFlagged(false);
+        --flaggedCells;
+    } else {
+        m_cells[row][col].setFlagged(true);
+        ++flaggedCells;
+    }
+    return true;
+}
+
+int BoardModel::getRemainingMineCount() const {
+    return m_mines - flaggedCells;
+}
+
+int BoardModel::getFlaggedCount() const {
+    return flaggedCells;
+}
+bool BoardModel::isCellFlagged(int row, int col) const {
+    if (!isValidPosition(row, col)) return false;
+    return m_cells[row][col].isFlagged();
 }

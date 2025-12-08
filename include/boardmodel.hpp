@@ -22,6 +22,7 @@ private:
     const int dx[8] = {-1, -1, -1,  0, 0,  1, 1, 1};
     const int dy[8] = {-1,  0,  1, -1, 1, -1, 0, 1};
     int revealedCells;
+    int flaggedCells;
 public:
     BoardModel();
 
@@ -40,6 +41,11 @@ public:
     void calculateAdjacentCounts();
     void revealCell(int row, int col);
     int getRevealedCount() const;
+
+    bool toggleFlag(int row, int col);
+    int getRemainingMineCount() const;
+    int getFlaggedCount() const;
+    bool isCellFlagged(int row, int col) const;
 };
 
 #endif // BOARDMODEL_HPP
