@@ -13,7 +13,6 @@ public:
     BoardWidget(int rows, int cols, QWidget* parent = nullptr);
 
     void createGrid(int rows, int cols);
-    CellButton* cellAt(int row, int col) const;
 private slots:
     void handleLeftClick(int row, int col);
     void handleRightClick(int row, int col);

@@ -36,12 +36,6 @@ void BoardWidget::createGrid(int rows, int cols) {
     }
 }
 
-CellButton* BoardWidget::cellAt(int row, int col) const
-{
-    if (row >= 0 && row < m_rows && col >= 0 && col < m_cols) return m_cells[row][col];
-    return nullptr;
-}
-
 void BoardWidget::handleLeftClick(int row, int col) {
     qDebug() << "Left click at " << row << "," << col;
     emit leftClicked(row, col);
