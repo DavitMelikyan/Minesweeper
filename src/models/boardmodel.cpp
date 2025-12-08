@@ -54,8 +54,8 @@ void BoardModel::placeMines(int excludeRow, int excludeCol) {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> rRow(0, m_rows - 1);
     std::uniform_int_distribution<int> rCol(0, m_cols - 1);
-    if (m_mines > m_rows * m_cols - 1) m_mines = m_rows * m_cols - 1;
-    while (count < m_mines) {
+    int minesToPlace = std::min(m_mines, m_rows * m_cols - 1);
+    while (count < minesToPlace) {
         int i = rRow(gen);
         int j = rCol(gen);
         if (i == excludeRow && j == excludeCol) continue;
@@ -67,6 +67,7 @@ void BoardModel::placeMines(int excludeRow, int excludeCol) {
     frow = excludeRow;
     fcol = excludeCol;
     minesPlaced = true;
+    calculateAdjacentCounts();
 }
 
 int BoardModel::getPlacedMineCount() const {
@@ -75,4 +76,20 @@ int BoardModel::getPlacedMineCount() const {
 
 bool BoardModel::isFirstClick() const {
     return !minesPlaced;
+}
+
+void BoardModel::calculateAdjacentCounts() {
+    for (int r = 0; r < m_rows; ++r) {
+        for (int c = 0; c < m_cols; ++c) {
+            if (m_cells[r][c].hasMine()) continue;
+            int count = 0;
+            for (int i = 0; i < 8; ++i) {
+                int ri = r + dx[i];
+                int ci = c + dy[i];
+                if (!isValidPosition(ri, ci)) continue;
+                if (m_cells[ri][ci].hasMine()) ++count;
+            }
+            m_cells[r][c].setAdjacentMines(count);
+        }
+    }
 }

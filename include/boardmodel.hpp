@@ -18,6 +18,8 @@ private:
     int fcol;
     int placedMines;
     bool minesPlaced;
+    const int dx[8] = {-1, -1, -1,  0, 0,  1, 1, 1};
+    const int dy[8] = {-1,  0,  1, -1, 1, -1, 0, 1};
 public:
     BoardModel();
 
@@ -33,6 +35,7 @@ public:
     void placeMines(int excludeRow, int excludeCol);
     int getPlacedMineCount() const;
     bool isFirstClick() const;
+    void calculateAdjacentCounts();
 };
 
 #endif // BOARDMODEL_HPP
