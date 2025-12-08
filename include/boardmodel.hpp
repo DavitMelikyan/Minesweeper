@@ -3,6 +3,7 @@
 
 #include "cellmodel.hpp"
 #include <vector>
+#include <random>
 
 enum class GameState { NotStarted, Playing, Won, Lost };
 
@@ -13,6 +14,10 @@ private:
     int m_cols;
     int m_mines;
     GameState m_state;
+    int frow;
+    int fcol;
+    int placedMines;
+    bool minesPlaced;
 public:
     BoardModel();
 
@@ -24,6 +29,10 @@ public:
     bool isValidPosition(int row, int col) const;
     void setGameState(GameState state);
     GameState getGameState() const;
+
+    void placeMines(int excludeRow, int excludeCol);
+    int getPlacedMineCount() const;
+    bool isFirstClick() const;
 };
 
 #endif // BOARDMODEL_HPP
