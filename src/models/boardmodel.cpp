@@ -1,6 +1,6 @@
 #include "include/boardmodel.hpp"
 
-BoardModel::BoardModel() : m_state(GameState::NotStarted), frow(-1), fcol(-1), placedMines(0), minesPlaced(false) {}
+BoardModel::BoardModel() : m_state(GameState::NotStarted), frow(-1), fcol(-1), placedMines(0), minesPlaced(false), revealedCells(0) {}
 
 
 void BoardModel::initializeBoard(int rows, int cols, int mineCount) {
@@ -16,6 +16,7 @@ void BoardModel::initializeBoard(int rows, int cols, int mineCount) {
     frow = -1;
     fcol = -1;
     minesPlaced = false;
+    revealedCells = 0;
 }
 
 CellModel& BoardModel::getCell(int row, int col) {
@@ -92,4 +93,51 @@ void BoardModel::calculateAdjacentCounts() {
             m_cells[r][c].setAdjacentMines(count);
         }
     }
+}
+
+void BoardModel::revealCell(int row, int col) {
+    if (!isValidPosition(row, col)) return;
+    if (m_cells[row][col].isRevealed() || m_cells[row][col].isFlagged()) return;
+    if (isFirstClick()) {
+        placeMines(row, col);
+    }
+    m_cells[row][col].setRevealed(true);
+    ++revealedCells;
+    if (m_cells[row][col].hasMine()) {
+        m_state = GameState::Lost;
+        return;
+    } else if (m_cells[row][col].adjacentMines() > 0) {
+        if (getRevealedCount() == m_rows * m_cols - m_mines) m_state = GameState::Won;
+        return;
+    } else {
+        std::queue<std::pair<int, int>> q;
+        q.push({row, col});
+        std::vector<std::vector<bool>> queued (m_rows, std::vector<bool>(m_cols, false));
+        queued[row][col] = true;
+        while (!q.empty()) {
+            auto [r, c] = q.front(); q.pop();
+            m_cells[r][c].setRevealed(true);
+            if (m_cells[r][c].adjacentMines() == 0) {
+                for (int i = 0; i < 8; ++i) {
+                    int ri = r + dx[i];
+                    int ci = c + dy[i];
+                    if (!isValidPosition(ri, ci) || m_cells[ri][ci].isFlagged() || m_cells[ri][ci].isRevealed()) continue;
+                    m_cells[ri][ci].setRevealed(true);
+                    ++revealedCells;
+
+                    if (m_cells[ri][ci].adjacentMines() > 0) continue;
+
+                    if (!queued[ri][ci]) {
+                        queued[ri][ci] = true;
+                        q.push({ri,ci});
+                    }
+                }
+            }
+        }
+        if (getRevealedCount() == m_rows * m_cols - m_mines) m_state = GameState::Won;
+    }
+}
+
+int BoardModel::getRevealedCount() const {
+    return revealedCells;
 }

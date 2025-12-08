@@ -4,6 +4,7 @@
 #include "cellmodel.hpp"
 #include <vector>
 #include <random>
+#include <queue>
 
 enum class GameState { NotStarted, Playing, Won, Lost };
 
@@ -20,6 +21,7 @@ private:
     bool minesPlaced;
     const int dx[8] = {-1, -1, -1,  0, 0,  1, 1, 1};
     const int dy[8] = {-1,  0,  1, -1, 1, -1, 0, 1};
+    int revealedCells;
 public:
     BoardModel();
 
@@ -36,6 +38,8 @@ public:
     int getPlacedMineCount() const;
     bool isFirstClick() const;
     void calculateAdjacentCounts();
+    void revealCell(int row, int col);
+    int getRevealedCount() const;
 };
 
 #endif // BOARDMODEL_HPP
