@@ -15,8 +15,7 @@
 #include <QMessageBox>
 #include <QFile>
 #include "include/ui/boardwidget.hpp"
-
-enum class GameState { Playing, Won, Lost };
+#include "include/controllers/gamecontroller.hpp"
 
 class StatusPanel : public QWidget {
     Q_OBJECT
@@ -58,6 +57,7 @@ private:
     QAction* exitGame;
     QAction* helpAbout;
     BoardWidget* board;
+    GameController* gameController;
     int m_rows;
     int m_cols;
     int m_mines;

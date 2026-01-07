@@ -10,7 +10,6 @@ MainWindow::MainWindow(int rows, int cols, int mines, QWidget* parent)
     setWindowSize();
 }
 
-
 void MainWindow::setUI() {
     menuBar = new QMenuBar(this);
     menu = new QMenu("Game", this);
@@ -82,6 +81,10 @@ void MainWindow::setConnections() {
 
     connect(board, &BoardWidget::leftClicked, this, &MainWindow::handleLeftClick);
     connect(board, &BoardWidget::rightClicked, this, &MainWindow::handleRightClick);
+
+    connect(board, &BoardWidget::leftClicked, gameController, &GameController::handleCellLeftClick);
+    connect(board, &BoardWidget::rightClicked, gameController, &GameController::handleCellRightClick);
+
 }
 
 void MainWindow::setWindowSize() {

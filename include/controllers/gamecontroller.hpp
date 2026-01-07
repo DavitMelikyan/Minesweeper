@@ -1,7 +1,6 @@
 #ifndef GAMECONTROLLER_HPP
 #define GAMECONTROLLER_HPP
 
-
 #include <QObject>
 #include "include/models/boardmodel.hpp"
 

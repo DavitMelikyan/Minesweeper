@@ -23,6 +23,7 @@ void GameController::handleCellLeftClick(int row, int col) {
     if (!m_firstClick) {
         m_board.placeMines(row, col);
         m_firstClick = true;
+        emit gameStateChanged(GameState::Playing);
     }
     m_board.revealCell(row, col);
     if (m_board.checkWinCondition()) {
