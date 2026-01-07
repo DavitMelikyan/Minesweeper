@@ -60,7 +60,7 @@ void GameController::handleCellRightClick(int row, int col) {
 }
 
 void GameController::handleRestart() {
-    m_board.newGame(m_rows, m_cols, m_mines);
+    m_board.resetGame();
     qDebug() << "Timer updated by restarting the game";
     resetTimer();
     qDebug() << "Mine count updated to " << m_mines << " by restarting the game";

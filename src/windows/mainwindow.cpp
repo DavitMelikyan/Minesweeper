@@ -1,7 +1,7 @@
 #include "include/windows/mainwindow.hpp"
 
 MainWindow::MainWindow(int rows, int cols, int mines, QWidget* parent)
-    : QMainWindow(parent), m_rows(rows), m_cols(cols), m_mines(mines), fClick(false)
+    : QMainWindow(parent), m_rows(rows), m_cols(cols), m_mines(mines)
 {
     setWindowIcon(QIcon(":/icons/gameicon.png"));
     setObjectName("GameWindow");
@@ -76,7 +76,7 @@ void MainWindow::setConnections() {
         QMessageBox::information(nullptr, "How to Play","Reveal all cells without hitting mines.\nLeft-click to reveal cell.\nRight-click to place flags.");
     });
 
-    connect(statusPanel, &StatusPanel::restartRequested, this, &MainWindow::newGame);
+    connect(statusPanel, &StatusPanel::restartRequested, gameController, &GameController::handleRestart);
 
     connect(board, &BoardWidget::leftClicked, gameController, &GameController::handleCellLeftClick);
     connect(board, &BoardWidget::rightClicked, gameController, &GameController::handleCellRightClick);
@@ -200,7 +200,7 @@ void StatusPanel::changeDiff(const QString& diff) {
 }
 
 void StatusPanel::setFaceState(GameState state) {
-    if (state == GameState::Playing) {
+    if (state == GameState::Playing || state == GameState::NotStarted) {
         restart->setText("😊");
         restart->setProperty("state", "playing");
     }

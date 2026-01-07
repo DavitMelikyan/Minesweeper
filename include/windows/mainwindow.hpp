@@ -56,7 +56,6 @@ private:
     int m_rows;
     int m_cols;
     int m_mines;
-    bool fClick;
 
     void setUI();
     void createStatusPanel();
