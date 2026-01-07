@@ -25,7 +25,6 @@ public:
     BoardModel();
 
     void initializeBoard(int rows, int cols, int mineCount);
-    CellModel& getCell(int row, int col);
     const CellModel& getCell(int row, int col) const;
     int getRows() const;
     int getCols() const;

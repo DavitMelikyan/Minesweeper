@@ -11,12 +11,12 @@ MainWindow::MainWindow(int rows, int cols, int mines, QWidget* parent)
 }
 
 void MainWindow::setUI() {
+    gameController = new GameController(m_rows, m_cols, m_mines);
     menuBar = new QMenuBar(this);
     menu = new QMenu("Game", this);
     startNewGame = menu->addAction("New Game");
     changeGameDiff = menu->addAction("Change Difficulty");
     exitGame = menu->addAction("Close the game");
-
 
     helpMenu = new QMenu("Help", this);
     helpAbout = helpMenu->addAction("Info about game");
@@ -30,7 +30,7 @@ void MainWindow::setUI() {
     createStatusPanel();
     layout->addWidget(statusPanel);
 
-    board = new BoardWidget(m_rows, m_cols, this);
+    board = new BoardWidget(gameController, m_rows, m_cols, this);
     board->setEnabled(true);
     layout->addWidget(board, 1);
 
@@ -78,13 +78,14 @@ void MainWindow::setConnections() {
 
     connect(statusPanel, &StatusPanel::restartRequested, this, &MainWindow::newGame);
 
-
-    connect(board, &BoardWidget::leftClicked, this, &MainWindow::handleLeftClick);
-    connect(board, &BoardWidget::rightClicked, this, &MainWindow::handleRightClick);
-
     connect(board, &BoardWidget::leftClicked, gameController, &GameController::handleCellLeftClick);
     connect(board, &BoardWidget::rightClicked, gameController, &GameController::handleCellRightClick);
 
+    connect(gameController, &GameController::cellUpdated, board, &BoardWidget::updateCell);
+    connect(gameController, &GameController::boardUpdated, board, &BoardWidget::refreshBoard);
+
+    connect(gameController, &GameController::mineCounterUpdated, this, &MainWindow::updateMineCounter);
+    connect(gameController, &GameController::gameStateChanged, this, &MainWindow::updateGameState);
 }
 
 void MainWindow::setWindowSize() {
@@ -118,6 +119,8 @@ void MainWindow::changeDifficulty() {
 
     setWindowSize();
     newGame();
+
+    gameController->handleDifficultyChange(m_rows, m_cols, m_mines);
 }
 
 void MainWindow::exitApp() {
@@ -143,6 +146,14 @@ void MainWindow::handleRightClick(int row, int col) {
         fClick = true;
         statusPanel->startTimer();
     }
+}
+
+void MainWindow::updateMineCounter(int remaining) {
+    statusPanel->updateMineCount(remaining);
+}
+
+void MainWindow::updateGameState(GameState state) {
+    statusPanel->setFaceState(state);
 }
 
 // StatusPanel Class

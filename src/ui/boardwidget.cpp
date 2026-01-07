@@ -1,13 +1,11 @@
 #include "include/ui/boardwidget.hpp"
 
-BoardWidget::BoardWidget(int rows, int cols, QWidget* parent) : QWidget(parent), m_rows(rows), m_cols(cols) {
+BoardWidget::BoardWidget(GameController* controller, int rows, int cols, QWidget* parent) : QWidget(parent), m_rows(rows), m_cols(cols), m_controller(controller) {
     layout = new QGridLayout(this);
     createGrid(rows, cols);
     setLayout(layout);
     layout->setSpacing(0);
     layout->setContentsMargins(0, 0, 0, 0);
-    // testCellsWithNumbers();
-    // testCellsWithStates();
 }
 
 void BoardWidget::createGrid(int rows, int cols) {
@@ -46,27 +44,36 @@ void BoardWidget::handleRightClick(int row, int col) {
     emit rightClicked(row, col);
 }
 
-// Debug functions
+void BoardWidget::updateCell(int row, int col) {
+    CellButton* cell = m_cells[row][col];
 
-void BoardWidget::testCellsWithNumbers() {
-    int testNumbers[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const GameState gameState = m_controller->getGameState();
+    const CellModel cModel = m_controller->getCellState(row, col);
 
-    for (int r = 0; r < m_rows; ++r) {
-        for (int c = 0; c < m_cols; ++c) {
-            m_cells[r][c]->setState(CellState::RevealedNumber, testNumbers[c % 8]);
+    if (gameState == GameState::Lost) {
+        if (cModel.hasMine() && !cModel.isFlagged()) cell->setState(CellState::RevealedMine);
+        else if (!cModel.hasMine() && cModel.isFlagged()) cell->setState(CellState::RevealedWrongFlag);
+        else if (cModel.isRevealed()) {
+            if (m_controller->getCellNumber(row, col) == 0) cell->setState(CellState::RevealedEmpty);
+            else cell->setState(CellState::RevealedNumber, m_controller->getCellNumber(row, col));
+        }
+        else cell->setState(CellState::Covered);
+    } else if (!cModel.isRevealed()) {
+        if (cModel.isFlagged()) cell->setState(CellState::Flagged);
+        else cell->setState(CellState::Covered);
+    } else {
+        if (m_controller->getCellState(row, col).hasMine()) cell->setState(CellState::RevealedMine);
+        else {
+            if (m_controller->getCellNumber(row, col) == 0) cell->setState(CellState::RevealedEmpty);
+            else cell->setState(CellState::RevealedNumber, m_controller->getCellNumber(row, col));
         }
     }
 }
 
-void BoardWidget::testCellsWithStates() {
-    CellState testStates[] = {
-        CellState::Covered, CellState::Flagged, CellState::RevealedEmpty,
-        CellState::RevealedNumber, CellState::RevealedMine, CellState::RevealedWrongFlag
-    };
-
+void BoardWidget::refreshBoard() {
     for (int r = 0; r < m_rows; ++r) {
         for (int c = 0; c < m_cols; ++c) {
-            m_cells[r][c]->setState(testStates[c % 6]);
+            updateCell(r, c);
         }
     }
 }

@@ -5,8 +5,8 @@ GameController::GameController(int rows, int cols, int mines) : QObject(nullptr)
     m_board.initializeBoard(m_rows, m_cols, m_mines);
 }
 
-bool GameController::getCellRevealed(int row, int col) const {
-    return m_board.getCell(row, col).isRevealed();
+const CellModel& GameController::getCellState(int row, int col) const {
+    return m_board.getCell(row, col);
 }
 
 int GameController::getCellNumber(int row, int col) const {

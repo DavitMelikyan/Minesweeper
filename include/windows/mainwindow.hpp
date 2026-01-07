@@ -75,6 +75,8 @@ private slots:
     void newGame();
     void changeDifficulty();
     void exitApp();
+    void updateMineCounter(int remaining);
+    void updateGameState(GameState state);
 public:
     MainWindow(int rows, int cols, int mines, QWidget* parent = nullptr);
 };

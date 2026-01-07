@@ -18,11 +18,6 @@ void BoardModel::initializeBoard(int rows, int cols, int mineCount) {
     mineRevealed = false;
 }
 
-CellModel& BoardModel::getCell(int row, int col) {
-    if (!isValidPosition(row, col)) throw std::out_of_range("Invalid cell");
-    return m_cells[row][col];
-}
-
 const CellModel& BoardModel::getCell(int row, int col) const {
     if (!isValidPosition(row, col)) throw std::out_of_range("Invalid cell");
     return m_cells[row][col];

@@ -5,14 +5,17 @@
 #include <QGridLayout>
 #include <vector>
 #include "include/ui/cell.hpp"
+#include "include/controllers/gamecontroller.hpp"
 
 class BoardWidget : public QWidget
 {
     Q_OBJECT
 public:
-    BoardWidget(int rows, int cols, QWidget* parent = nullptr);
+    BoardWidget(GameController* controller, int rows, int cols, QWidget* parent = nullptr);
 
     void createGrid(int rows, int cols);
+    void refreshBoard();
+    void updateCell(int row, int col);
 private slots:
     void handleLeftClick(int row, int col);
     void handleRightClick(int row, int col);
@@ -24,9 +27,7 @@ private:
     int m_rows;
     int m_cols;
     QGridLayout* layout;
-
-    void testCellsWithNumbers();
-    void testCellsWithStates();
+    GameController* m_controller;
 };
 
 #endif // BOARDWIDGET_HPP
