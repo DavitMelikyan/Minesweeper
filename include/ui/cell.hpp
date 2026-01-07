@@ -15,6 +15,7 @@ public:
     CellButton(int row, int col, QWidget* parent = nullptr);
     int row() const;
     int col() const;
+    CellState getState() const;
     void mousePressEvent(QMouseEvent* event) override;
     void setState(CellState st, int number = 0);
 signals:
@@ -23,6 +24,7 @@ signals:
 private:
     int m_row;
     int m_col;
+    CellState m_state;
 };
 
 #endif // CELL_HPP

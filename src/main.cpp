@@ -1,10 +1,10 @@
-#include "../include/gamecontroller.hpp"
+#include "../include/gamewindow.hpp"
 
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    GameController::instance();
+    GameWindow::instance();
     return a.exec();
 }

@@ -1,6 +1,6 @@
-#include "../include/gamecontroller.hpp"
+#include "include/windows/gamewindow.hpp"
 
-GameController::GameController(QWidget* parent) : QWidget(parent) {
+GameWindow::GameWindow(QWidget* parent) : QWidget(parent) {
     QFile f(":/qss/game.qss");
     if (f.open(QFile::ReadOnly | QFile::Text)) {
         qApp->setStyleSheet(QString::fromUtf8(f.readAll()));
@@ -9,15 +9,15 @@ GameController::GameController(QWidget* parent) : QWidget(parent) {
     welcome = new WelcomeWindow;
     welcome->show();
     centerWindow(welcome);
-    QObject::connect(welcome, &WelcomeWindow::difficultySelected, this, &GameController::startGame);
+    QObject::connect(welcome, &WelcomeWindow::difficultySelected, this, &GameWindow::startGame);
 }
 
-GameController::~GameController() {
+GameWindow::~GameWindow() {
     delete game;
     delete welcome;
 }
 
-void GameController::centerWindow(QWidget* window) {
+void GameWindow::centerWindow(QWidget* window) {
     if (!window) return;
     const QRect screenGeometry = QApplication::primaryScreen()->geometry();
     int x = (screenGeometry.width() - window->width()) / 2;
@@ -25,21 +25,21 @@ void GameController::centerWindow(QWidget* window) {
     window->move(x, y);
 }
 
-GameController& GameController::instance() {
-    static GameController instance;
+GameWindow& GameWindow::instance() {
+    static GameWindow instance;
     return instance;
 }
 
-void GameController::startGame(int rows, int cols, int mines) {
+void GameWindow::startGame(int rows, int cols, int mines) {
     game = new MainWindow(rows, cols, mines);
-    QObject::connect(game, &MainWindow::backRequested, this, &GameController::returnToMenu);
+    QObject::connect(game, &MainWindow::backRequested, this, &GameWindow::returnToMenu);
 
     game->show();
     welcome->close();
     centerWindow(game);
 }
 
-void GameController::returnToMenu() {
+void GameWindow::returnToMenu() {
     if (game) {
         delete game;
         game = nullptr;

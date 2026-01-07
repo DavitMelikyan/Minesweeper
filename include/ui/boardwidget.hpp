@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <vector>
-#include "include/cell.hpp"
+#include "include/ui/cell.hpp"
 
 class BoardWidget : public QWidget
 {

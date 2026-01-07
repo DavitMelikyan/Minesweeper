@@ -1,6 +1,7 @@
-#include "../include/welcomewindow.hpp"
+#include "include/windows/welcomewindow.hpp"
 
 WelcomeWindow::WelcomeWindow(QWidget *parent) : QWidget(parent), beginner(nullptr),  intermediate(nullptr), expert(nullptr) {
+    setWindowIcon(QIcon(":/icons/gameicon.png"));
     setObjectName("GameWindow");
     setUI();
     setConnections();

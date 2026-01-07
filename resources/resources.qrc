@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>qss/game.qss</file>
+        <file>icons/gameicon.png</file>
     </qresource>
 </RCC>

@@ -4,7 +4,7 @@
 #include "boardmodel.hpp"
 #include "boardwidget.hpp"
 #include "cell.hpp"
-#include "gamecontroller.hpp"
+#include "gamewindow.hpp"
 #include "mainwindow.hpp"
 #include "welcomewindow.hpp"
 

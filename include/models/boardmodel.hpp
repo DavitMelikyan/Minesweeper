@@ -1,7 +1,7 @@
 #ifndef BOARDMODEL_HPP
 #define BOARDMODEL_HPP
 
-#include "cellmodel.hpp"
+#include "include/models/cellmodel.hpp"
 #include <vector>
 #include <random>
 #include <queue>

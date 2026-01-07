@@ -1,8 +1,9 @@
-#include "../include/cell.hpp"
+#include "include/ui/cell.hpp"
 
 CellButton::CellButton(int row, int col, QWidget* parent) : QPushButton(parent), m_row(row), m_col(col) {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setState(CellState::Covered);
+    m_state = CellState::Covered;
 }
 
 
@@ -12,6 +13,10 @@ int CellButton::row() const {
 
 int CellButton::col() const {
     return m_col;
+}
+
+CellState CellButton::getState() const {
+    return m_state;
 }
 
 void CellButton::mousePressEvent(QMouseEvent* event) {
@@ -43,6 +48,7 @@ void CellButton::setState(CellState st, int number) {
         setText(QString::fromUtf8("🚩✖"));
     }
 
+    m_state = st;
     style()->unpolish(this);
     style()->polish(this);
     update();

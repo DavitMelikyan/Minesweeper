@@ -1,4 +1,4 @@
-#include "include/boardmodel.hpp"
+#include "include/models/boardmodel.hpp"
 
 BoardModel::BoardModel() : m_state(GameState::NotStarted), frow(-1), fcol(-1), placedMines(0), minesPlaced(false), revealedCells(0), flaggedCells(0), mineRevealed(false) {}
 
@@ -151,6 +151,7 @@ int BoardModel::getRevealedCount() const {
 bool BoardModel::toggleFlag(int row, int col) {
     if (isGameOver()) return false;
     if (!isValidPosition(row, col)) return false;
+    if (isFirstClick()) placeMines(row, col);
     if (m_cells[row][col].isRevealed()) return false;
     if (m_cells[row][col].isFlagged()) {
         m_cells[row][col].setFlagged(false);

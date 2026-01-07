@@ -1,4 +1,4 @@
-#include "../include/boardwidget.hpp"
+#include "include/ui/boardwidget.hpp"
 
 BoardWidget::BoardWidget(int rows, int cols, QWidget* parent) : QWidget(parent), m_rows(rows), m_cols(cols) {
     layout = new QGridLayout(this);

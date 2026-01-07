@@ -1,4 +1,4 @@
-#include "include/cellmodel.hpp"
+#include "include/models/cellmodel.hpp"
 
 CellModel::CellModel() : m_hasMine(false), m_adjacentMines(0), m_isRevealed(false), m_isFlagged(false) { }
 

@@ -14,7 +14,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QFile>
-#include "boardwidget.hpp"
+#include "include/ui/boardwidget.hpp"
 
 enum class GameState { Playing, Won, Lost };
 

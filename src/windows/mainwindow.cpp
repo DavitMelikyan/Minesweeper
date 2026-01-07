@@ -1,8 +1,9 @@
-#include "../include/mainwindow.hpp"
+#include "include/windows/mainwindow.hpp"
 
 MainWindow::MainWindow(int rows, int cols, int mines, QWidget* parent)
     : QMainWindow(parent), m_rows(rows), m_cols(cols), m_mines(mines), fClick(false)
 {
+    setWindowIcon(QIcon(":/icons/gameicon.png"));
     setObjectName("GameWindow");
     setUI();
     setConnections();
