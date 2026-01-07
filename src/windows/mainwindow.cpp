@@ -219,9 +219,11 @@ void StatusPanel::setFaceState(GameState state) {
 }
 
 void StatusPanel::updateMineCount(int mcount) {
+    if (mcount < -99) mcount = -99;
     mineCounter->display(QString("%1").arg(mcount, 3, 10, QLatin1Char('0')));
 }
 
 void StatusPanel::updateTimer(int seconds) {
+    if (seconds > 999) seconds = 999;
     timerCounter->display(QString("%1").arg(seconds, 3, 10, QLatin1Char('0')));
 }
