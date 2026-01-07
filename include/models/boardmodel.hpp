@@ -15,10 +15,7 @@ private:
     int m_cols;
     int m_mines;
     GameState m_state;
-    int frow;
-    int fcol;
     int placedMines;
-    bool minesPlaced;
     const int dx[8] = {-1, -1, -1,  0, 0,  1, 1, 1};
     const int dy[8] = {-1,  0,  1, -1, 1, -1, 0, 1};
     int revealedCells;
@@ -29,6 +26,7 @@ public:
 
     void initializeBoard(int rows, int cols, int mineCount);
     CellModel& getCell(int row, int col);
+    const CellModel& getCell(int row, int col) const;
     int getRows() const;
     int getCols() const;
     int getMineCount() const;

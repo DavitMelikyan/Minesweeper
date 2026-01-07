@@ -13,9 +13,10 @@ private:
     int m_rows;
     int m_cols;
     int m_mines;
+    bool m_firstClick;
 public:
     explicit GameController(int rows, int cols, int mines);
-    bool getCellState(int row, int col) const;
+    bool getCellRevealed(int row, int col) const;
     int getCellNumber(int row, int col) const;
     GameState getGameState() const;
 signals:

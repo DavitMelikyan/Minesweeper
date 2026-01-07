@@ -1,6 +1,6 @@
 #include "include/models/boardmodel.hpp"
 
-BoardModel::BoardModel() : m_state(GameState::NotStarted), frow(-1), fcol(-1), placedMines(0), minesPlaced(false), revealedCells(0), flaggedCells(0), mineRevealed(false) {}
+BoardModel::BoardModel() : m_state(GameState::NotStarted), placedMines(0), revealedCells(0), flaggedCells(0), mineRevealed(false) {}
 
 
 void BoardModel::initializeBoard(int rows, int cols, int mineCount) {
@@ -13,15 +13,17 @@ void BoardModel::initializeBoard(int rows, int cols, int mineCount) {
     m_cells.resize(rows);
     for (int r = 0; r < m_rows; ++r) m_cells[r].resize(cols);
     placedMines = 0;
-    frow = -1;
-    fcol = -1;
-    minesPlaced = false;
     revealedCells = 0;
     flaggedCells = 0;
     mineRevealed = false;
 }
 
 CellModel& BoardModel::getCell(int row, int col) {
+    if (!isValidPosition(row, col)) throw std::out_of_range("Invalid cell");
+    return m_cells[row][col];
+}
+
+const CellModel& BoardModel::getCell(int row, int col) const {
     if (!isValidPosition(row, col)) throw std::out_of_range("Invalid cell");
     return m_cells[row][col];
 }
@@ -51,7 +53,6 @@ GameState BoardModel::getGameState() const {
 }
 
 void BoardModel::placeMines(int excludeRow, int excludeCol) {
-    if (!isFirstClick()) return;
     int count = 0;
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -67,18 +68,11 @@ void BoardModel::placeMines(int excludeRow, int excludeCol) {
         ++count;
     }
     placedMines = count;
-    frow = excludeRow;
-    fcol = excludeCol;
-    minesPlaced = true;
     calculateAdjacentCounts();
 }
 
 int BoardModel::getPlacedMineCount() const {
     return placedMines;
-}
-
-bool BoardModel::isFirstClick() const {
-    return !minesPlaced;
 }
 
 void BoardModel::calculateAdjacentCounts() {
@@ -98,13 +92,7 @@ void BoardModel::calculateAdjacentCounts() {
 }
 
 void BoardModel::revealCell(int row, int col) {
-    if (isGameOver()) return;
-    if (!isValidPosition(row, col)) return;
     if (m_cells[row][col].isRevealed() || m_cells[row][col].isFlagged()) return;
-    if (isFirstClick()) {
-        placeMines(row, col);
-        m_state = GameState::Playing;
-    }
     m_cells[row][col].setRevealed(true);
     ++revealedCells;
     if (m_cells[row][col].hasMine()) {
@@ -149,9 +137,6 @@ int BoardModel::getRevealedCount() const {
 }
 
 bool BoardModel::toggleFlag(int row, int col) {
-    if (isGameOver()) return false;
-    if (!isValidPosition(row, col)) return false;
-    if (isFirstClick()) placeMines(row, col);
     if (m_cells[row][col].isRevealed()) return false;
     if (m_cells[row][col].isFlagged()) {
         m_cells[row][col].setFlagged(false);
@@ -207,10 +192,7 @@ void BoardModel::resetGame() {
         }
     }
     m_state = GameState::NotStarted;
-    frow = -1;
-    fcol = -1;
     placedMines = 0;
-    minesPlaced = false;
     revealedCells = 0;
     flaggedCells = 0;
     mineRevealed = false;
