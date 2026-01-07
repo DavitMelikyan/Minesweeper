@@ -48,7 +48,7 @@ void BoardWidget::updateCell(int row, int col) {
     CellButton* cell = m_cells[row][col];
 
     const GameState gameState = m_controller->getGameState();
-    const CellModel cModel = m_controller->getCellState(row, col);
+    const CellModel& cModel = m_controller->getCellState(row, col);
 
     if (gameState == GameState::Lost) {
         if (cModel.hasMine() && !cModel.isFlagged()) cell->setState(CellState::RevealedMine);

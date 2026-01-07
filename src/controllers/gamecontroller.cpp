@@ -1,8 +1,10 @@
 #include "include/controllers/gamecontroller.hpp"
 #include <QtCore/qdebug.h>
 
-GameController::GameController(int rows, int cols, int mines) : QObject(nullptr), m_rows(rows), m_cols(cols), m_mines(mines), m_firstClick(false) {
+GameController::GameController(int rows, int cols, int mines) : QObject(nullptr), m_rows(rows), m_cols(cols), m_mines(mines), m_firstClick(false), m_timer(new QTimer(this)), m_seconds(0) {
     m_board.initializeBoard(m_rows, m_cols, m_mines);
+    m_timer->setInterval(1000);
+    connect(m_timer, &QTimer::timeout, this, &GameController::onTimerTick);
 }
 
 const CellModel& GameController::getCellState(int row, int col) const {
@@ -23,16 +25,19 @@ void GameController::handleCellLeftClick(int row, int col) {
     if (!m_firstClick) {
         m_board.placeMines(row, col);
         m_firstClick = true;
+        startTimer();
         emit gameStateChanged(GameState::Playing);
     }
     m_board.revealCell(row, col);
     if (m_board.checkWinCondition()) {
         qDebug() << "Game Won";
+        stopTimer();
         emit gameWon();
         emit gameStateChanged(GameState::Won);
     }
     else if (m_board.checkLossCondition()) {
         qDebug() << "Game Lost";
+        stopTimer();
         emit gameLost();
         emit gameStateChanged(GameState::Lost);
     }
@@ -57,7 +62,7 @@ void GameController::handleCellRightClick(int row, int col) {
 void GameController::handleRestart() {
     m_board.newGame(m_rows, m_cols, m_mines);
     qDebug() << "Timer updated by restarting the game";
-    emit timerUpdated(0);
+    resetTimer();
     qDebug() << "Mine count updated to " << m_mines << " by restarting the game";
     emit mineCounterUpdated(m_mines);
     emit gameStateChanged(GameState::NotStarted);
@@ -67,14 +72,13 @@ void GameController::handleRestart() {
 }
 
 void GameController::handleDifficultyChange(int rows, int cols, int mines) {
-    if (m_rows != rows || m_cols != cols) {
-        m_rows = rows;
-        m_cols = cols;
-        m_board.newGame(rows, cols, mines);
-    }
+    m_rows = rows;
+    m_cols = cols;
     m_mines = mines;
+    m_board.newGame(rows, cols, mines);
+
     qDebug() << "Timer updated by changing the difficulty";
-    emit timerUpdated(0);
+    resetTimer();
     qDebug() << "Mine count updated to " << m_mines << " by changing the difficulty";
     emit mineCounterUpdated(m_mines);
     emit gameStateChanged(GameState::NotStarted);
@@ -82,3 +86,23 @@ void GameController::handleDifficultyChange(int rows, int cols, int mines) {
     emit boardUpdated();
     m_firstClick = false;
 }
+
+void GameController::startTimer() {
+    if (!m_timer->isActive()) m_timer->start();
+}
+
+void GameController::stopTimer() {
+    if (m_timer->isActive()) m_timer->stop();
+}
+
+void GameController::resetTimer() {
+    stopTimer();
+    m_seconds = 0;
+    emit timerUpdated(0);
+}
+
+void GameController::onTimerTick() {
+    ++m_seconds;
+    emit timerUpdated(m_seconds);
+}
+

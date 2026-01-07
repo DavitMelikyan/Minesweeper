@@ -26,6 +26,7 @@ void CellButton::mousePressEvent(QMouseEvent* event) {
 }
 
 void CellButton::setState(CellState st, int number) {
+    setText("");
     if (st == CellState::Covered) setProperty("cellState", "covered");
     else if (st == CellState::Flagged) {
         setProperty("cellState", "flagged");
@@ -36,7 +37,8 @@ void CellButton::setState(CellState st, int number) {
         setText("");
     }
     else if (st == CellState::RevealedNumber) {
-        setProperty("cellState", "revealedNumber"); setProperty("number", QString::number(number));
+        setProperty("cellState", "revealedNumber");
+        setProperty("number", QString::number(number));
         setText(QString::number(number));
     }
     else if (st == CellState::RevealedMine) {

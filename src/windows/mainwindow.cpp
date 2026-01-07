@@ -86,6 +86,7 @@ void MainWindow::setConnections() {
 
     connect(gameController, &GameController::mineCounterUpdated, this, &MainWindow::updateMineCounter);
     connect(gameController, &GameController::gameStateChanged, this, &MainWindow::updateGameState);
+    connect(gameController, &GameController::timerUpdated, statusPanel, &StatusPanel::updateTimer);
 }
 
 void MainWindow::setWindowSize() {
@@ -115,12 +116,9 @@ void MainWindow::changeDifficulty() {
     }
 
     statusPanel->changeDiff(diff);
-    board->createGrid(m_rows, m_cols);
-
-    setWindowSize();
-    newGame();
-
     gameController->handleDifficultyChange(m_rows, m_cols, m_mines);
+    board->createGrid(m_rows, m_cols);
+    setWindowSize();
 }
 
 void MainWindow::exitApp() {
@@ -128,25 +126,10 @@ void MainWindow::exitApp() {
 }
 
 void MainWindow::newGame() {
+    gameController->handleRestart();
     statusPanel->setFaceState(GameState::Playing);
-    statusPanel->resetTimer();
-    statusPanel->stopTimer();
-    statusPanel->updateMineCount(m_mines);
-    fClick = false;
 }
 
-void MainWindow::handleLeftClick(int row, int col) {
-    if (!fClick) {
-        fClick = true;
-        statusPanel->startTimer();
-    }
-}
-void MainWindow::handleRightClick(int row, int col) {
-    if (!fClick) {
-        fClick = true;
-        statusPanel->startTimer();
-    }
-}
 
 void MainWindow::updateMineCounter(int remaining) {
     statusPanel->updateMineCount(remaining);
@@ -168,8 +151,6 @@ void StatusPanel::setUI() {
     timerCounter = new QLCDNumber(3, this);
     restart = new QPushButton("😊", this);
     diffLabel = new QLabel("Beginner", this);
-    timer = new QTimer(this);
-    timer->setInterval(1000);
 
     mineCounter->setSegmentStyle(QLCDNumber::Flat);
     timerCounter->setSegmentStyle(QLCDNumber::Flat);
@@ -207,7 +188,6 @@ void StatusPanel::setConnections() {
     connect(restart, &QPushButton::clicked, [this]() {
         emit restartRequested();
     });
-    connect(timer, &QTimer::timeout, this, &StatusPanel::updateTimer);
 }
 
 void StatusPanel::changeDiff(const QString& diff) {
@@ -242,20 +222,6 @@ void StatusPanel::updateMineCount(int mcount) {
     mineCounter->display(QString("%1").arg(mcount, 3, 10, QLatin1Char('0')));
 }
 
-void StatusPanel::updateTimer() {
-    timerCounter->display(QString("%1").arg(m_seconds++, 3, 10, QLatin1Char('0')));
-}
-
-void StatusPanel::startTimer() {
-    m_seconds = 0;
-    timer->start();
-}
-
-void StatusPanel::stopTimer() {
-    timer->stop();
-}
-
-void StatusPanel::resetTimer() {
-    m_seconds = 0;
-    updateTimer();
+void StatusPanel::updateTimer(int seconds) {
+    timerCounter->display(QString("%1").arg(seconds, 3, 10, QLatin1Char('0')));
 }

@@ -24,9 +24,7 @@ private:
     QPushButton* restart;
     QLCDNumber* timerCounter;
     QLabel* diffLabel;
-    QTimer* timer;
     int mines = 0;
-    int m_seconds = 0;
 
     void setUI();
     void setConnections();
@@ -37,10 +35,7 @@ public:
     void setFaceState(GameState state);
     void changeDiff(const QString& diff);
     void updateMineCount(int mcount);
-    void updateTimer();
-    void startTimer();
-    void resetTimer();
-    void stopTimer();
+    void updateTimer(int seconds);
 };
 
 class MainWindow : public QMainWindow
@@ -70,8 +65,6 @@ private:
 signals:
     void backRequested();
 private slots:
-    void handleLeftClick(int row, int col);
-    void handleRightClick(int row, int col);
     void newGame();
     void changeDifficulty();
     void exitApp();
